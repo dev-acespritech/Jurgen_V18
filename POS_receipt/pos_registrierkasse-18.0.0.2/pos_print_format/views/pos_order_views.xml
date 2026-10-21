@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_order_form_a4_print" model="ir.ui.view">
+        <field name="name">pos.order.form.a4.print</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="a4_printing_enabled" invisible="1"/>
+                <button name="action_print_a4" string="Print A4" type="object"
+                        invisible="not a4_printing_enabled"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

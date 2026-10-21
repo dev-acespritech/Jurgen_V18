@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_a4_printing" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.pos.print.format</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='restaurant_section']" position="after">
+                <block title="A4 Printing" id="pos_a4_printing_section">
+                    <setting id="a4_printing_setting" string="Enable A4 Printing"
+                            help="Print an A4 PDF after payment instead of the standard receipt (selected shop only).">
+                        <field name="pos_enable_a4_printing"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

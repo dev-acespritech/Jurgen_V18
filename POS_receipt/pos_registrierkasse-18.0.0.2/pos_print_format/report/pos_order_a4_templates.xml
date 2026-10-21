@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_pos_order_a4">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="fiscal" t-value="o._a4_get_fiscal_data()"/>
+                <t t-set="tax_rows" t-value="o._a4_get_tax_summary()"/>
+                <t t-set="lines" t-value="o._a4_get_lines()"/>
+                <t t-set="payments" t-value="o._a4_get_payments()"/>
+                <t t-set="currency" t-value="o.currency_id"/>
+                <t t-set="has_discount" t-value="o._a4_has_discount()"/>    
+
+                <t t-call="web.external_layout">
+                    <t t-if="o.partner_id">
+                        <t t-set="address">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <div t-if="o.partner_id.vat">
+                                <t t-out="o.partner_id.country_id.vat_label or 'Tax ID'"/>:
+                                <span t-field="o.partner_id.vat"/>
+                            </div>
+                        </t>
+                    </t>
+                    <div class="page">
+                        <h2 class="mt-4">
+                            <span>POS</span>
+                            <span t-out="o.pos_reference or o.name"/>
+                        </h2>
+                        <div class="row mt-4 mb-4" id="informations">
+                            <div class="col-3">
+                                <strong>Order Date</strong>
+                                <div t-out="o.date_order" t-options="{'widget': 'datetime'}"/>
+                            </div>
+                            <div class="col-3" t-if="o.tracking_number">
+                                <strong>Order Number</strong>
+                                <div t-out="o.tracking_number"/>
+                            </div>
+                            <div class="col-3" t-if="o.user_id">
+                                <strong>Served by</strong>
+                                <div t-out="o.user_id.name"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Point of Sale</strong>
+                                <div t-out="o.config_id.name"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm o_main_table table-borderless mt-4">
+                           <thead style="display: table-row-group">
+                                <tr>
+                                    <th class="text-start">Description</th>
+                                    <th style="text-align: center;">Quantity</th>
+                                    <th style="text-align: center;">Unit Price</th>
+                                    <th t-if="has_discount" style="text-align: center;">Disc.%</th>
+                                    <th style="text-align: center;">Taxes</th>
+                                    <th style="text-align: right;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="lines" t-as="l">
+                                    <td class="text-start">
+                                        <span t-out="l['name']"/>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span t-out="l['qty']"
+                                              t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
+                                        <span class="small" t-out="l['uom']"/>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span t-out="l['unit_price']"
+                                              t-options="{'widget': 'float', 'decimal_precision': 'Product Price'}"/>
+                                    </td>
+                                    <td t-if="has_discount" style="text-align: center;">
+                                        <span t-out="'%g' % l['discount']"/>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span t-out="l['taxes']"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <span t-out="l['amount']"
+                                              t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="clearfix mb-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>Order Reference: <strong t-out="o.pos_reference or o.name"/></p>
+                                </div>
+                                <div class="col-5 offset-1">
+                                    <table class="table table-sm table-borderless">
+                                        <tr class="border-black o_subtotal">
+                                            <td>Untaxed Amount</td>
+                                            <td class="text-end"
+                                                t-out="o.amount_total - o.amount_tax"
+                                                t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </tr>
+                                        <tr t-foreach="tax_rows" t-as="t">
+                                            <td>
+                                                Tax <span t-out="'%g' % t['rate']"/>%
+                                                <t t-if="len(tax_rows) &gt; 1">on
+                                                    <span t-out="t['base']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                                </t>
+                                            </td>
+                                            <td class="text-end" t-out="t['tax']"
+                                                t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </tr>
+                                        <tr class="border-black o_total">
+                                            <td><strong>Total</strong></td>
+                                            <td class="text-end">
+                                                <strong t-out="o.amount_total"
+                                                        t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-foreach="payments" t-as="p">
+                                            <td><i class="text-muted">Paid by <t t-out="p.payment_method_id.name"/></i></td>
+                                            <td class="text-end" t-out="p.amount"
+                                                t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </tr>
+                                        <tr t-if="o.amount_return">
+                                            <td>Change</td>
+                                            <td class="text-end" t-out="o.amount_return"
+                                                t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div t-if="fiscal['rksv_active']" style="page-break-inside: avoid;">
+                            <t t-if="fiscal['signed']">
+                              <table>
+                                    <tr>
+                                        <td style="width:42mm; vertical-align:top;">
+                                            <img t-att-src="fiscal['qr_data_uri']" style="width:38mm; height:38mm;" alt="RKSV QR"/>
+                                        </td>
+                                        <td style="vertical-align:middle;">
+                                            <div>Kassenidentifikationsnummer: <t t-out="fiscal['kassen_id']"/></div>
+                                            <div>Fortlaufende Belegnummer: <t t-out="fiscal['receipt_number']"/></div>
+                                            <div t-if="fiscal['signed_date']">Beleg-Datum/Uhrzeit: <t t-out="fiscal['signed_date']"/></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <t t-else="">
+                                <strong>Sicherheitseinrichtung ausgefallen</strong>
+                            </t>
+                        </div>
+                        <p t-if="o.config_id.receipt_footer" class="mt-4" style="white-space:pre-line;"
+                           t-out="o.config_id.receipt_footer"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_pos_order_a4" model="ir.actions.report">
+        <field name="name">POS Order (A4)</field>
+        <field name="model">pos.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">pos_print_format.report_pos_order_a4</field>
+        <field name="report_file">pos_print_format.report_pos_order_a4</field>
+        <field name="print_report_name">'Invoice_%s' % (object.pos_reference or object.id)</field>
+        <field name="paperformat_id" ref="pos_print_format.paperformat_pos_order_a4"/>
+        <field name="binding_model_id" eval="False"/>
+    </record>
+</odoo>

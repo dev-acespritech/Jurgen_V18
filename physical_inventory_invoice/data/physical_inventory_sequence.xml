@@ -1,0 +1,9 @@
+<odoo>
+    <record id="seq_physical_inventory_session" model="ir.sequence">
+        <field name="name">Physical Inventory Count</field>
+        <field name="code">physical.inventory.session</field>
+        <field name="prefix">PIC/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

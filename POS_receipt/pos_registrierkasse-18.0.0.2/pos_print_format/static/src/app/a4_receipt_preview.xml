@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="pos_print_format.A4ReceiptPreview">
+        <div class="o_a4_receipt_preview bg-white" t-ref="wrapper" t-att-style="wrapperStyle">
+            <iframe t-att-src="src" title="A4 invoice preview" t-att-style="iframeStyle"/>
+        </div>
+    </t>
+
+    <t t-inherit="point_of_sale.ReceiptScreen" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('pos-receipt-container')]/div" position="attributes">
+            <attribute name="t-att-class">{ 'w-50': !ui.isSmall and !showA4Preview, 'w-100': showA4Preview }</attribute>
+        </xpath>
+        <xpath expr="//OrderReceipt" position="replace">
+            <A4ReceiptPreview t-if="showA4Preview" orderId="currentOrder.id"/>
+            <OrderReceipt t-else="" data="pos.orderExportForPrinting(pos.get_order())" formatCurrency="env.utils.formatCurrency"/>
+        </xpath>
+    </t>
+
+</templates>

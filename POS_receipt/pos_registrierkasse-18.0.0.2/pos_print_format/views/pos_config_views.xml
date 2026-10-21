@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_view_form_a4_printing" model="ir.ui.view">
+        <field name="name">pos.config.form.a4.printing</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_registrierkasse.view_pos_config_form_extension"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@id='rksv_compliance']/parent::div" position="after">
+                <div title="A4 Printing" class="row mt16 o_settings_container" id="a4_printing_section">
+                    <setting id="a4_printing" string="Enable A4 Printing"
+                            help="After payment, print an A4 PDF invoice (with the RKSV QR code) instead of the standard receipt. Applies to this shop only.">
+                        <field name="enable_a4_printing"/>
+                    </setting>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
