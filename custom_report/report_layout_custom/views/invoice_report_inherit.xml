@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document_custom"
+              inherit_id="account.report_invoice_document">
+        <xpath expr="//div[hasclass('page')]" position="before">
+            <t t-call="report_layout_custom.custom_report_style"/>
+        </xpath>
+
+        <xpath expr="//div[@id='qrcode_image']/p/img[1]" position="attributes">
+            <attribute name="style">width:26mm;height:26mm;</attribute>
+        </xpath>
+    </template>
+</odoo>

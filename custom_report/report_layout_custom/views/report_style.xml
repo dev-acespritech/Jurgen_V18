@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_report_style">
+        <style type="text/css">
+
+            /* 1. Address block: match surrounding text size */
+            .address,
+            .address *,
+            div[name="address"],
+            div[name="address"] * {
+                font-size: 1rem !important;
+            }
+
+            /* 2. Table header: gray background, borders and spacing */
+            table.o_main_table {
+                border-collapse: collapse !important;
+            }
+
+            table.o_main_table > thead > tr > th {
+                background-color: #E8E8E8 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-weight: bold !important;
+                border-top: 1px solid #000 !important;
+                border-bottom: 1px solid #000 !important;
+                border-left: 0 !important;
+                border-right: 0 !important;
+                padding: 6px 8px !important;
+            }
+
+            table.o_main_table > thead > tr > th:first-child {
+                border-left: 1px solid #000 !important;
+            }
+
+            table.o_main_table > thead > tr > th:last-child {
+                border-right: 1px solid #000 !important;
+            }
+
+            /* 3. Payment QR code: approximately 28% smaller */
+            #qrcode_image p > img:first-child {
+                width: 26mm !important;
+                height: 26mm !important;
+                max-width: none !important;
+            }
+
+            /* 4. Add spacing inside totals table cells */
+            .o_total_table td,
+            .o_total_table th,
+            table#total td,
+            table#total th {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+
+            /* Add vertical spacing between totals rows */
+            .o_total_table,
+            table#total {
+                border-collapse: separate !important;
+                border-spacing: 0 4px !important;
+            }
+
+            /* Add breathing room to the final totals row */
+            .o_total_table tr:last-child td,
+            .o_total_table tr:last-child th,
+            table#total tr:last-child td,
+            table#total tr:last-child th {
+                padding-top: 6px !important;
+                padding-bottom: 6px !important;
+            }
+
+        </style>
+    </template>
+</odoo>
